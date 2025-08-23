@@ -132,4 +132,7 @@ with gr.Blocks(
     msg.submit(chat, [msg, chatbot], [msg, chatbot])
     clear.click(lambda: [], None, chatbot)
 
-page.launch(share=True)
+page.launch(
+    server_name="0.0.0.0",
+    server_port=int(os.getenv("PORT", 7860))
+)
