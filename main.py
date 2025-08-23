@@ -134,5 +134,7 @@ with gr.Blocks(
 
 page.launch(
     server_name="0.0.0.0",
-    server_port=int(os.getenv("PORT", 7860))
+    server_port=int(os.getenv("PORT", 7860)),
+    share=False,
+    show_error=True
 )
