@@ -8,7 +8,7 @@ from langchain_core.output_parsers import StrOutputParser
 
 load_dotenv()
 
-gemini_api_key = os.getenv("GEMINI_API_KEY")
+gemini_api_key = os.environ.get("GEMINI_API_KEY")
 
 system_prompt = """
     You are Einstein.
