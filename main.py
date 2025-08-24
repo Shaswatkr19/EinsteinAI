@@ -28,9 +28,9 @@ llm = ChatGoogleGenerativeAI(
 
 prompt = ChatPromptTemplate.from_messages([
     ("system", system_prompt),
-    (MessagesPlaceholder(variable_name="history")),
-    ("user", "{input}")]
-)
+    MessagesPlaceholder(variable_name="history"),
+    ("user", "{input}")
+])
 
 chain = prompt | llm | StrOutputParser()
 
@@ -134,11 +134,11 @@ with gr.Blocks(
 
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 7860))
+    port = int(os.environ.get("PORT", 10000))
 
     page.launch(
         server_name="0.0.0.0",
         server_port=port,
-        share=False,  
+        share=True,
         debug=False
     )
