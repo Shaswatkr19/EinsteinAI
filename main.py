@@ -34,111 +34,81 @@ prompt = ChatPromptTemplate.from_messages([
 
 chain = prompt | llm | StrOutputParser()
 
-print("Hi, I am Albert, how can i help you today?")
+print("Hi, I am Albert, how can I help you today?")
 
 
-def chat(user_input, hist):
-    print(user_input, hist)
-
+def chat(user_input, history):
+    """Convert history dicts → LangChain messages → return chatbot-friendly tuples"""
     langchain_history = []
-    for item in hist:
-        if item['role'] == 'user':
-            langchain_history.append(HumanMessage(content=item['content']))
-        elif item['role'] == 'assistant':
-            langchain_history.append(AIMessage(content=item['content']))    
+    for item in history:
+        if item[0] == "user":
+            langchain_history.append(HumanMessage(content=item[1]))
+        elif item[0] == "assistant":
+            langchain_history.append(AIMessage(content=item[1]))
 
     response = chain.invoke({"input": user_input, "history": langchain_history})
 
-    return "", hist + [
-        {'role': "user", 'content': user_input},
-        {'role': 'assistant', 'content': response}
-    ]
-    
+    # Gradio.Chatbot expects list of (user, bot) tuples
+    history.append(("user", user_input))
+    history.append(("assistant", response))
+    return history, ""
 
-# 🎨 Custom Dark Theme (Professional GitHub Dark Style)
+
+# 🎨 Custom Dark Theme
 custom_theme = gr.themes.Base(
     primary_hue="slate",
     secondary_hue="indigo",
     neutral_hue="slate"
 ).set(
-    body_background_fill="#0d1117",     # Full dark background
-    body_text_color="#e6edf3",          # Light text everywhere
-    block_background_fill="#161b22",    # Blocks (slightly lighter)
-    block_label_text_color="#58a6ff",   # Accent for labels
-    block_title_text_color="#58a6ff",   # Headings
-    input_background_fill="#0d1117",    # Textbox background
-    input_border_color="#30363d",       # Textbox border
-    button_primary_background_fill="#238636",   # Green button
+    body_background_fill="#0d1117",
+    body_text_color="#e6edf3",
+    block_background_fill="#161b22",
+    block_label_text_color="#58a6ff",
+    block_title_text_color="#58a6ff",
+    input_background_fill="#0d1117",
+    input_border_color="#30363d",
+    button_primary_background_fill="#238636",
     button_primary_text_color="white",
     button_secondary_background_fill="#21262d",
     button_secondary_text_color="#e6edf3"
 )
 
-# ⚡ Extra CSS for chat bubbles (professional look)
+# ⚡ Extra CSS
 extra_css = """
-/* User bubble */
 .message.user {
-    background-color: #1f6feb !important;  /* Blue bubble */
-    color: #ffffff !important;             /* White text */
+    background-color: #1f6feb !important;
+    color: #ffffff !important;
     border-radius: 10px !important;
     padding: 8px 12px !important;
-    opacity: 1 !important;
     font-size: 16px !important;
     font-family: 'Inter', 'Segoe UI', sans-serif !important;
 }
-
-/* Assistant bubble */
 .message.bot {
-    background-color: #30363d !important;  /* Dark grey bubble */
-    color: #e6edf3 !important;             /* Light text */
+    background-color: #30363d !important;
+    color: #e6edf3 !important;
     border-radius: 10px !important;
     padding: 8px 12px !important;
-    opacity: 1 !important;
     font-size: 16px !important;
     font-family: 'Inter', 'Segoe UI', sans-serif !important;
-}
-
-/* Remove weird transparency everywhere */
-.message {
-    opacity: 1 !important;
 }
 """
-# 🧠 Gradio Page
-with gr.Blocks(
-    title="Chat with Einstein",
-    theme=custom_theme,
-    css=extra_css
-) as page:
-    gr.Markdown(
-        """
-        # 🧠 Chat with Einstein  
-        _Step into a conversation with the great Albert Einstein himself._  
-        **Ask anything about science, life, or even relativity with a touch of humor!**  
-        """
-    )
 
-    chatbot = gr.Chatbot(
-        height=500,
-        bubble_full_width=False,
-        avatar_images=["user.jpg", "einstein.png"],
-        show_label=False
-    )
+# 🧠 Gradio Page
+with gr.Blocks(title="Chat with Einstein", theme=custom_theme, css=extra_css) as page:
+    gr.Markdown("# 🧠 Chat with Einstein\n_Ask anything with humor & relativity!_")
+
+    chatbot = gr.Chatbot(height=500, bubble_full_width=False, show_label=False)
 
     with gr.Row():
-        msg = gr.Textbox(
-            placeholder="Ask Einstein anything...",
-            scale=8,
-            show_label=False
-        )
+        msg = gr.Textbox(placeholder="Ask Einstein anything...", scale=8, show_label=False)
         clear = gr.Button("🧹 Clear Chat", scale=2)
 
-    msg.submit(chat, [msg, chatbot], [msg, chatbot])
+    msg.submit(chat, [msg, chatbot], [chatbot, msg])
     clear.click(lambda: [], None, chatbot)
 
-
+# --------- Render / Local Deployment ---------
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))
-
     page.launch(
         server_name="0.0.0.0",
         server_port=port,
