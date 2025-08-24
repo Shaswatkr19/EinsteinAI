@@ -132,9 +132,6 @@ with gr.Blocks(
     msg.submit(chat, [msg, chatbot], [msg, chatbot])
     clear.click(lambda: [], None, chatbot)
 
-# Replace your current launch code with this:
-
-import os
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 7860))
@@ -142,6 +139,5 @@ if __name__ == "__main__":
     page.launch(
         server_name="0.0.0.0",
         server_port=port,
-        share=True,
         debug=False
     )
