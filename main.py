@@ -141,13 +141,24 @@ def load_session(evt: gr.SelectData):
     
     return current_history, current_session_display
 
-# Your original theme (working)
+# 🎨 Custom Dark Theme
 custom_theme = gr.themes.Base(
     primary_hue="slate",
     secondary_hue="indigo",
     neutral_hue="slate"
+).set(
+    body_background_fill="#0d1117",
+    body_text_color="#e6edf3",
+    block_background_fill="#161b22",
+    block_label_text_color="#58a6ff",
+    block_title_text_color="#58a6ff",
+    input_background_fill="#0d1117",
+    input_border_color="#30363d",
+    button_primary_background_fill="#238636",
+    button_primary_text_color="white",
+    button_secondary_background_fill="#21262d",
+    button_secondary_text_color="#e6edf3"
 )
-
 # Enhanced CSS with better sidebar styling
 extra_css = """
 /* Dark background */
