@@ -38,21 +38,19 @@ print("Hi, I am Albert, how can I help you today?")
 
 
 def chat(user_input, history):
-    """Convert history dicts → LangChain messages → return chatbot-friendly tuples"""
+    """Proper user/bot tuple formatting for Gradio Chatbot"""
     langchain_history = []
-    for item in history:
-        if item[0] == "user":
-            langchain_history.append(HumanMessage(content=item[1]))
-        elif item[0] == "assistant":
-            langchain_history.append(AIMessage(content=item[1]))
+    for user, bot in history:
+        if user:
+            langchain_history.append(HumanMessage(content=user))
+        if bot:
+            langchain_history.append(AIMessage(content=bot))
 
     response = chain.invoke({"input": user_input, "history": langchain_history})
 
-    # Gradio.Chatbot expects list of (user, bot) tuples
-    history.append(("user", user_input))
-    history.append(("assistant", response))
+    # Append as (user_msg, bot_msg) tuple
+    history.append((user_input, response))
     return history, ""
-
 
 # 🎨 Custom Dark Theme
 custom_theme = gr.themes.Base(
@@ -97,7 +95,12 @@ extra_css = """
 with gr.Blocks(title="Chat with Einstein", theme=custom_theme, css=extra_css) as page:
     gr.Markdown("# 🧠 Chat with Einstein\n_Ask anything with humor & relativity!_")
 
-    chatbot = gr.Chatbot(height=500, bubble_full_width=False, show_label=False)
+    chatbot = gr.Chatbot(
+    height=500,
+    bubble_full_width=False,
+    show_label=False,
+    avatar_images=["user.jpg", "einstein.png"]   # optional
+)
 
     with gr.Row():
         msg = gr.Textbox(placeholder="Ask Einstein anything...", scale=8, show_label=False)
