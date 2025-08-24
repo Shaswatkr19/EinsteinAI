@@ -117,9 +117,12 @@ with gr.Blocks(
         """
     )
 
-    chatbot = gr.Chatbot(type="messages", height=500, bubble_full_width=False,
-                         avatar_images=['user.jpg', 'einstein.png'],
-                         show_label=False)
+    chatbot = gr.Chatbot(
+        height=500,
+        bubble_full_width=False,
+        avatar_images=["user.jpg", "einstein.png"],
+        show_label=False
+    )
 
     with gr.Row():
         msg = gr.Textbox(
