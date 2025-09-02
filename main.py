@@ -141,6 +141,254 @@ def load_session(evt: gr.SelectData):
     
     return current_history, current_session_display
 
+# Mobile responsive CSS
+mobile_responsive_css = """
+/* Base styles */
+* {
+    box-sizing: border-box;
+}
+
+/* Container */
+.gradio-container {
+    background-color: #0d1117 !important;
+    padding: 10px !important;
+}
+
+/* Header - responsive */
+h1 {
+    text-align: center !important;
+    color: #58a6ff !important;
+    font-size: clamp(1.5rem, 4vw, 2rem) !important;
+    margin-bottom: 1rem !important;
+    line-height: 1.2 !important;
+}
+
+/* Layout adjustments for mobile */
+@media (max-width: 768px) {
+    .gradio-container {
+        padding: 5px !important;
+    }
+    
+    /* Stack layout on mobile */
+    .gr-row {
+        flex-direction: column !important;
+        gap: 10px !important;
+    }
+    
+    /* History sidebar - mobile adjustments */
+    .sidebar-column {
+        order: 2 !important;
+        min-width: 100% !important;
+        max-height: 200px !important;
+    }
+    
+    /* Chat area - mobile first */
+    .chat-column {
+        order: 1 !important;
+        min-width: 100% !important;
+    }
+    
+    /* History list - mobile */
+    .history-list {
+        height: 150px !important;
+        font-size: 12px !important;
+        line-height: 1.2 !important;
+    }
+    
+    /* Chatbot - mobile height */
+    .chatbot-mobile {
+        height: 400px !important;
+    }
+    
+    /* Input row - mobile stack */
+    .input-row {
+        flex-direction: column !important;
+        gap: 8px !important;
+    }
+    
+    /* Message input - full width on mobile */
+    .message-input-mobile {
+        width: 100% !important;
+        min-height: 44px !important;
+        font-size: 16px !important; /* Prevents zoom on iOS */
+        padding: 12px !important;
+    }
+    
+    /* Buttons - mobile friendly */
+    .mobile-buttons {
+        display: flex !important;
+        gap: 8px !important;
+        width: 100% !important;
+    }
+    
+    .mobile-buttons button {
+        flex: 1 !important;
+        min-height: 44px !important;
+        font-size: 14px !important;
+    }
+}
+
+/* Tablet adjustments */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .history-list {
+        height: 500px !important;
+        max-width: 300px !important;
+    }
+}
+
+/* Desktop - original styling enhanced */
+@media (min-width: 1025px) {
+    /* History list desktop */
+    .history-list {
+        height: 600px !important;
+        max-width: 260px !important;
+    }
+}
+
+/* Dark theme - all devices */
+body {
+    background-color: #0d1117 !important;
+}
+
+/* History list styling */
+.history-list {
+    background-color: #171717 !important;
+    color: #ececf1 !important;
+    border: 1px solid #2d2d2d !important;
+    border-radius: 6px !important;
+    padding: 8px !important;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+    font-size: 13px !important;
+    line-height: 1.3 !important;
+    white-space: pre-wrap !important;
+    cursor: pointer !important;
+    overflow-y: auto !important;
+}
+
+.history-list:hover {
+    background-color: #1f1f1f !important;
+    border-color: #404040 !important;
+}
+
+/* Input styling - responsive */
+input[type="text"], textarea {
+    background-color: #40414f !important;
+    border: 1px solid #565869 !important;
+    color: white !important;
+    border-radius: 8px !important;
+    padding: 12px !important;
+}
+
+input[type="text"]:focus, textarea:focus {
+    border-color: #58a6ff !important;
+    box-shadow: 0 0 5px rgba(88, 166, 255, 0.3) !important;
+    outline: none !important;
+}
+
+/* Buttons - responsive */
+button {
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    transition: all 0.2s ease !important;
+    cursor: pointer !important;
+}
+
+/* Send button */
+.send-btn {
+    background-color: #238636 !important;
+    color: white !important;
+    border: none !important;
+    padding: 10px 20px !important;
+}
+
+.send-btn:hover {
+    background-color: #2ea043 !important;
+    transform: translateY(-1px) !important;
+}
+
+/* Clear button */
+.clear-btn {
+    background-color: #da3633 !important;
+    color: white !important;
+    border: none !important;
+    padding: 10px 12px !important;
+}
+
+.clear-btn:hover {
+    background-color: #f85149 !important;
+    transform: translateY(-1px) !important;
+}
+
+/* New Chat button */
+.new-chat-btn {
+    background-color: transparent !important;
+    color: #ececf1 !important;
+    border: 1px solid #565869 !important;
+    padding: 8px 12px !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    width: 100% !important;
+    margin-top: 8px !important;
+}
+
+.new-chat-btn:hover {
+    background-color: #2d2d2d !important;
+    border-color: #404040 !important;
+}
+
+/* Chat messages - responsive */
+.message.user {
+    background-color: #0969da !important;
+    color: white !important;
+    border-radius: 15px !important;
+    padding: 10px 15px !important;
+    margin: 5px 0 !important;
+    word-wrap: break-word !important;
+}
+
+.message.bot {
+    background-color: #30363d !important;
+    color: #e6edf3 !important;
+    border-radius: 15px !important;
+    padding: 10px 15px !important;
+    margin: 5px 0 !important;
+    border: 1px solid #21262d !important;
+    word-wrap: break-word !important;
+}
+
+/* Chatbot area */
+.scroll-hide {
+    background-color: #161b22 !important;
+    border: 1px solid #30363d !important;
+    border-radius: 8px !important;
+}
+
+/* Scrollbars */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: #161b22;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #565869;
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #6c6d7f;
+}
+
+/* Touch targets for mobile */
+@media (max-width: 768px) {
+    button, input, textarea {
+        min-height: 44px !important;
+    }
+}
+"""
+
 # 🎨 Custom Dark Theme
 custom_theme = gr.themes.Base(
     primary_hue="slate",
@@ -159,201 +407,14 @@ custom_theme = gr.themes.Base(
     button_secondary_background_fill="#21262d",
     button_secondary_text_color="#e6edf3"
 )
-# Enhanced CSS with better sidebar styling
-extra_css = """
-/* Dark background */
-body {
-    background-color: #1a1a1a !important;
-}
 
-/* Header */
-h1 {
-    text-align: center !important;
-    color: #58a6ff !important;
-    font-size: 2rem !important;
-    margin-bottom: 0.5rem !important;
-}
-
-/* ChatGPT-inspired Sidebar styling */
-.sidebar {
-    background-color: #171717 !important;
-    border: 1px solid #2d2d2d !important;
-    border-radius: 8px !important;
-    padding: 8px !important;
-    max-width: 260px !important;
-}
-
-.sidebar h3 {
-    color: #ffffff !important;
-    margin-bottom: 12px !important;
-    font-size: 14px !important;
-    font-weight: 600 !important;
-    text-align: left !important;
-}
-
-/* History list styling - ChatGPT inspired */
-.history-list {
-    background-color: #171717 !important;
-    color: #ececf1 !important;
-    border: 1px solid #2d2d2d !important;
-    border-radius: 6px !important;
-    padding: 4px !important;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
-    font-size: 13px !important;
-    line-height: 1.3 !important;
-    white-space: pre-wrap !important;
-    cursor: pointer !important;
-    max-width: 240px !important;
-    height: 600px !important;
-    overflow-y: auto !important;
-}
-
-.history-list:hover {
-    background-color: #1f1f1f !important;
-    border-color: #404040 !important;
-}
-
-/* Session item styling */
-.history-session {
-    padding: 8px 10px !important;
-    margin: 2px 0 !important;
-    border-radius: 6px !important;
-    border: 1px solid transparent !important;
-    transition: all 0.2s ease !important;
-    cursor: pointer !important;
-}
-
-.history-session:hover {
-    background-color: #2d2d2d !important;
-    border-color: #404040 !important;
-}
-
-.history-session.active {
-    background-color: #10a37f !important;
-    color: white !important;
-}
-
-/* Input styling */
-input[type="text"] {
-    background-color: #40414f !important;
-    border: 1px solid #565869 !important;
-    color: white !important;
-    border-radius: 8px !important;
-    padding: 12px !important;
-}
-
-input[type="text"]:focus {
-    border-color: #58a6ff !important;
-    box-shadow: 0 0 5px rgba(88, 166, 255, 0.3) !important;
-}
-
-/* Chat messages */
-.message.user {
-    background-color: #0969da !important;
-    color: white !important;
-    border-radius: 15px !important;
-    padding: 10px 15px !important;
-    margin: 5px 0 !important;
-}
-
-.message.bot {
-    background-color: #30363d !important;
-    color: #e6edf3 !important;
-    border-radius: 15px !important;
-    padding: 10px 15px !important;
-    margin: 5px 0 !important;
-    border: 1px solid #21262d !important;
-}
-
-/* Buttons */
-button {
-    border-radius: 8px !important;
-    font-weight: 600 !important;
-    transition: all 0.2s ease !important;
-}
-
-/* Send button - green */
-button:nth-of-type(1) {
-    background-color: #238636 !important;
-    color: white !important;
-    border: none !important;
-    padding: 10px 20px !important;
-}
-
-button:nth-of-type(1):hover {
-    background-color: #2ea043 !important;
-    transform: translateY(-1px) !important;
-}
-
-/* Clear button - red and smaller */
-button:nth-of-type(2) {
-    background-color: #da3633 !important;
-    color: white !important;
-    border: none !important;
-    padding: 10px 12px !important;
-    min-width: 50px !important;
-}
-
-button:nth-of-type(2):hover {
-    background-color: #f85149 !important;
-    transform: translateY(-1px) !important;
-}
-
-/* New Chat button - ChatGPT style */
-button:nth-of-type(3) {
-    background-color: transparent !important;
-    color: #ececf1 !important;
-    border: 1px solid #565869 !important;
-    padding: 8px 12px !important;
-    font-size: 13px !important;
-    font-weight: 500 !important;
-    width: 100% !important;
-    margin-top: 8px !important;
-}
-
-button:nth-of-type(3):hover {
-    background-color: #2d2d2d !important;
-    border-color: #404040 !important;
-}
-
-/* Chat container */
-.gradio-container {
-    background-color: #0d1117 !important;
-}
-
-/* Make chatbot area dark */
-.scroll-hide {
-    background-color: #161b22 !important;
-    border: 1px solid #30363d !important;
-    border-radius: 8px !important;
-}
-
-/* Scrollbar for history */
-.history-list::-webkit-scrollbar {
-    width: 4px;
-}
-
-.history-list::-webkit-scrollbar-track {
-    background: #1a1a1a;
-}
-
-.history-list::-webkit-scrollbar-thumb {
-    background: #565869;
-    border-radius: 2px;
-}
-
-.history-list::-webkit-scrollbar-thumb:hover {
-    background: #6c6d7f;
-}
-"""
-
-# Gradio interface with History Sidebar
-with gr.Blocks(title="Chat with Albert Einstein", theme=custom_theme, css=extra_css) as page:
+# Gradio interface with mobile responsiveness
+with gr.Blocks(title="Chat with Albert Einstein", theme=custom_theme, css=mobile_responsive_css) as page:
     gr.Markdown("# 🧠 Chat with Albert Einstein\n_Ask anything with humor & relativity!_")
     
-    with gr.Row():
-        # Left sidebar for history - ChatGPT inspired
-        with gr.Column(scale=1, min_width=250):
+    with gr.Row(elem_classes=["main-row"]):
+        # Left sidebar for history - responsive
+        with gr.Column(scale=1, min_width=250, elem_classes=["sidebar-column"]):
             gr.Markdown("### 📚 Chat History")
             session_history = gr.Textbox(
                 value="Start your first conversation with Albert Einstein!",
@@ -362,26 +423,28 @@ with gr.Blocks(title="Chat with Albert Einstein", theme=custom_theme, css=extra_
                 show_label=False,
                 elem_classes=["history-list"]
             )
-            new_chat_btn = gr.Button(" ✚ New Chat", size="sm")
+            new_chat_btn = gr.Button(" ✚ New Chat", size="sm", elem_classes=["new-chat-btn"])
         
-        # Main chat area
-        with gr.Column(scale=4):
+        # Main chat area - responsive
+        with gr.Column(scale=4, elem_classes=["chat-column"]):
             chatbot = gr.Chatbot(
                 height=600,
-                bubble_full_width=False,
                 show_label=False,
-                avatar_images=["user.jpg", "einstein.png"]   # optional
-                
+                elem_classes=["chatbot-mobile"],
+                avatar_images=["user.jpg", "einstein.png"]
             )
             
-            with gr.Row():
-                msg = gr.Textbox(
-                    placeholder="Ask Einstein anything... (Press Enter to send)", 
-                    scale=7, 
-                    show_label=False
-                )
-                send_btn = gr.Button("Ask", scale=2)
-                clear = gr.Button("Clear Chat", scale=1)
+            with gr.Row(elem_classes=["input-row"]):
+                with gr.Column(scale=7):
+                    msg = gr.Textbox(
+                        placeholder="Ask Einstein anything... (Press Enter to send)", 
+                        show_label=False,
+                        elem_classes=["message-input-mobile"]
+                    )
+                with gr.Column(scale=3, elem_classes=["mobile-buttons"]):
+                    with gr.Row():
+                        send_btn = gr.Button("Ask", elem_classes=["send-btn"])
+                        clear = gr.Button("Clear", elem_classes=["clear-btn"])
     
     # Event handlers
     msg.submit(chat, [msg, chatbot, session_history], [chatbot, msg, session_history])
